@@ -11,8 +11,8 @@ describe('POST /join', () => {
     request(app)
       .post('/auth/join')
       .send({
-        email: 'ypd014760@gmail.com',
-        nick: 'otw',
+        email: 'zerohch0@gmail.com',
+        nick: 'zerocho',
         password: 'nodejsbook',
       })
       .expect('Location', '/')
@@ -20,13 +20,13 @@ describe('POST /join', () => {
   });
 });
 
-describe('POST /join', () => {
+describe('POST /login', () => {
   const agent = request.agent(app);
   beforeEach((done) => {
     agent
       .post('/auth/login')
       .send({
-        email: 'ypd014760@gmail.com',
+        email: 'zerohch0@gmail.com',
         password: 'nodejsbook',
       })
       .end(done);
@@ -37,8 +37,8 @@ describe('POST /join', () => {
     agent
       .post('/auth/join')
       .send({
-        email: 'ypd014760@gmail.com',
-        nick: 'otw',
+        email: 'zerohch0@gmail.com',
+        nick: 'zerocho',
         password: 'nodejsbook',
       })
       .expect('Location', `/?error=${message}`)
@@ -46,40 +46,36 @@ describe('POST /join', () => {
   });
 });
 
-afterAll(async () => {
-  await sequelize.sync({ force: true });
-});
-
 describe('POST /login', () => {
-  test('가입되지 않은 회원', (done) => {
+  test('가입되지 않은 회원', async (done) => {
     const message = encodeURIComponent('가입되지 않은 회원입니다.');
     request(app)
       .post('/auth/login')
       .send({
-        email: 'ypd014761@gmail.com',
+        email: 'zerohch1@gmail.com',
         password: 'nodejsbook',
       })
       .expect('Location', `/?error=${message}`)
       .expect(302, done);
   });
 
-  test('로그인 수행', (done) => {
+  test('로그인 수행', async (done) => {
     request(app)
       .post('/auth/login')
       .send({
-        email: 'ypd014760@gmail.com',
+        email: 'zerohch0@gmail.com',
         password: 'nodejsbook',
       })
       .expect('Location', '/')
       .expect(302, done);
   });
 
-  test('비밀번호 틀림', (done) => {
+  test('비밀번호 틀림', async (done) => {
     const message = encodeURIComponent('비밀번호가 일치하지 않습니다.');
     request(app)
       .post('/auth/login')
       .send({
-        email: 'ypd014760@gmail.com',
+        email: 'zerohch0@gmail.com',
         password: 'wrong',
       })
       .expect('Location', `/?error=${message}`)
@@ -88,7 +84,7 @@ describe('POST /login', () => {
 });
 
 describe('GET /logout', () => {
-  test('로그인 되어있지 않으면 403', (done) => {
+  test('로그인 되어있지 않으면 403', async (done) => {
     request(app)
       .get('/auth/logout')
       .expect(403, done);
@@ -99,13 +95,14 @@ describe('GET /logout', () => {
     agent
       .post('/auth/login')
       .send({
-        email: 'ypd014760@gmail.com',
+        email: 'zerohch0@gmail.com',
         password: 'nodejsbook',
       })
       .end(done);
   });
 
-  test('로그아웃 수행', (done) => {
+  test('로그아웃 수행', async (done) => {
+    const message = encodeURIComponent('비밀번호가 일치하지 않습니다.');
     agent
       .get('/auth/logout')
       .expect('Location', `/`)

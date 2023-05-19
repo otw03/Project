@@ -25,7 +25,7 @@ exports.renderMain = async (req, res, next) => {
     console.error(err);
     next(err);
   }
-};
+}
 
 exports.renderHashtag = async (req, res, next) => {
   const query = req.query.hashtag;

@@ -1,17 +1,15 @@
 const passport = require('passport');
-const local = require('./localStrategy'); // 이메일 로그인
-const kakao = require('./kakaoStrategy'); // 카카오 로그인
+const local = require('./localStrategy');
+const kakao = require('./kakaoStrategy');
 const User = require('../models/user');
 
 module.exports = () => {
   passport.serializeUser((user, done) => {
-    // console.log('serialize');
     done(null, user.id);
   });
 
   passport.deserializeUser((id, done) => {
-    // console.log('deserialize');
-    User.findOne({ 
+    User.findOne({
       where: { id },
       include: [{
         model: User,
@@ -21,12 +19,9 @@ module.exports = () => {
         model: User,
         attributes: ['id', 'nick'],
         as: 'Followings',
-      }], 
+      }],
     })
-      .then(user => {
-        // console.log('user', user);
-        done(null, user)
-      })
+      .then(user => done(null, user))
       .catch(err => done(err));
   });
 
